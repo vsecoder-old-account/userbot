@@ -2,5 +2,6 @@
   "name": "userbot",
   "description": "UserBot telegram vsevolodhtml.",
   "repository": "https://github.com/htmlcssphpjs/userbot",
+  "logo": "https://raw.githubusercontent.com/htmlcssphpjs/codebin/main/static/code.png",
   "keywords": ["tg", "userbot", "python"]
 }

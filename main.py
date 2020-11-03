@@ -15,6 +15,7 @@ import time, requests, json
 from time import sleep
 import random
 from translate import Translator
+#from prettytable import PrettyTable
 
 app = Client("my_account")
 
@@ -80,11 +81,58 @@ def code1(app, msg):
     except Exception as e:
         msg.edit_text(f"Упс... ошибка...\n`{e}`")
 
+@app.on_message(filters.command("ip", prefixes="."))
+def ipgoo(app, msg):
+    try:
+        # https://geoipt.herokuapp.com/image/<mail>@yandex.ru
+        msg.edit_text('https://bit.ly/2HQ0wk9')
+    except Exception as e:
+        msg.edit_text(f"Упс... ошибка...\n`{e}`")
+
+@app.on_message(filters.command("webhtml", prefixes="."))
+def webc(app, msg):
+    try:
+        text = msg.text.split(".webhtml ", maxsplit=1)[1]
+        response = requests.get(text)
+        htmltxt = str(response.text)
+        paste = requests.post(post, data={"content": htmltxt})
+        paste.raise_for_status()
+    except Exception as e:
+        msg.edit_text(f"Упс... ошибка...\n`{e}`")
+    else:
+        msg.edit_text(
+            f"Код сайта: {URL}/{paste.json()['result']['key']}", disable_web_page_preview=True
+        )
+
+@app.on_message(filters.command("webinfo", prefixes="."))
+def webl(app, msg):
+    try:
+        text = msg.text.split(".webinfo ", maxsplit=1)[1]
+        response = requests.get(text)
+    except Exception as e:
+        msg.edit_text(f"Упс... ошибка...\n`{e}`")
+    else:
+        msg.edit_text(
+            "Информация о сайте: \n" + str(response.headers), disable_web_page_preview=True
+        )
+
+@app.on_message(filters.command("webcode", prefixes="."))
+def webm(app, msg):
+    try:
+        text = msg.text.split(".webcode ", maxsplit=1)[1]
+        response = requests.get(text)
+    except Exception as e:
+        msg.edit_text(f"Упс... ошибка...\n`{e}`")
+    else:
+        msg.edit_text(
+            "Код ответа: " + str(response.status_code), disable_web_page_preview=True
+        )
+
 @app.on_message(filters.command(["v", "version", "info"], prefixes="."))
 def copyright(app, msg):
     #Советую не трогать этот код!
     copyright = 0;
-    copy1 = "Version: 2.8.03\n\n<a href='http://bit.ly/userbottg'>sourse code</a>\n\n@vsevolodhtmlru"
+    copy1 = "Version: 2.8.03\n\n<a href='https://bit.ly/userbottg'>sourse code</a>\n\n@vsevolodhtmlru"
     msg.edit_text(copy1, parse_mode='html')
 
 @app.on_message(filters.command("flip", prefixes=".") & filters.me)
@@ -239,18 +287,37 @@ def trnsru(app, msg):
 def test(app, msg):
     testr = 0
     result = random.randint(97, 100)
-    while(testr < 30):
+    while(testr < 10):
         try:
-            text = "/"
+            text = "⠋"
             msg.edit(text)
             sleep(0.1)
-            text = "–"
+            text = "⠙"
             msg.edit(text)
             sleep(0.1)
-            text = "\\"
+            text = "⠹"
             msg.edit(text)
             sleep(0.1)
-            text = "|"
+            text = "⠸"
+            msg.edit(text)
+            sleep(0.1)
+            text = "⠼"
+            msg.edit(text)
+            sleep(0.1)
+            text = "⠴"
+            msg.edit(text)
+            sleep(0.1)
+            text = "⠦"
+            msg.edit(text)
+            sleep(0.1)
+            text = "⠧"
+            msg.edit(text)
+            sleep(0.1)
+            sleep(0.1)
+            text = "⠇"
+            msg.edit(text)
+            sleep(0.1)
+            text = "⠏"
             msg.edit(text)
             sleep(0.1)
             testr += random.randint(1, 3)
@@ -260,6 +327,154 @@ def test(app, msg):
 
     msg.edit("Test complete, works " + str(result) + "% modules")
 
+@app.on_message(filters.command("run", prefixes="."))
+def run(app, msg):
+    testr = 0
+    while(testr < 50):
+        try:
+            text = "🏃"
+            msg.edit(text)
+            sleep(0.1)
+            text = "🚶"
+            msg.edit(text)
+            sleep(0.1)
+            testr += random.randint(1, 3)
+        except FloodWait as e:
+            sleep(e.x)
+
+    msg.edit("RUN")
+
+@app.on_message(filters.command("love", prefixes="."))
+def love(app, msg):
+    testr = 0
+    while(testr < 15):
+        try:
+            text = "💛 "
+            msg.edit(text)
+            sleep(0.1)
+            text = "💙 "
+            msg.edit(text)
+            sleep(0.1)
+            text = "💜 "
+            msg.edit(text)
+            sleep(0.1)
+            text = "💚 "
+            msg.edit(text)
+            sleep(0.1)
+            text = "❤️ "
+            msg.edit(text)
+            sleep(0.1)
+            testr += random.randint(1, 3)
+        except FloodWait as e:
+            sleep(e.x)
+
+    msg.edit("❤️")
+
+@app.on_message(filters.command("game", prefixes="."))
+def game(app, msg):
+    msg.edit_text('🎲')
+
+@app.on_message(filters.command("pong", prefixes="."))
+def pong(app, msg):
+    testr = 0
+    while(testr < 5):
+        try:
+            text = "▐⠂       ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐⠈       ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐ ⠂      ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐ ⠠      ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐  ⡀     ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐  ⠠     ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐   ⠂    ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐   ⠈    ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐    ⠂   ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐    ⠠   ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐     ⡀  ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐     ⠠  ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐      ⠂ ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐      ⠈ ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐       ⠂▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐       ⠠▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐       ⡀▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐      ⠠ ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐      ⠂ ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐     ⠈  ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐     ⠂  ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐    ⠠   ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐    ⡀   ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐   ⠠    ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐   ⠂    ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐  ⠈     ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐  ⠂     ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐ ⠠      ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐ ⡀      ▌"
+            msg.edit(text)
+            sleep(0.1)
+            text = "▐⠠       ▌"
+            msg.edit(text)
+            sleep(0.1)
+            testr += random.randint(1, 3)
+        except FloodWait as e:
+            sleep(e.x)
+
+    msg.edit("▐⠂⠂⠂⠂⠂⠂⠂⠂▌")
+
 @app.on_message(filters.command("me", prefixes="."))
 def mee(app, msg):
     name = msg.from_user.first_name
@@ -268,6 +483,182 @@ def mee(app, msg):
     iduser = msg.from_user.id
     msg.edit_text("Имя: " + str(name) + " " + str(name1) + "\nСсылка: @" + str(url) + "\nID: " + str(iduser))
 
+@app.on_message(filters.command(["console", "cmd"], prefixes="."))
+def brain(app, msg):
+    msg.edit("`>_`")
+    sleep(0.1)
+    msg.edit("`>  `")
+    sleep(0.1)
+    msg.edit("`>_`")
+    sleep(0.1)
+    msg.edit("`>  `")
+    sleep(0.1)
+    msg.edit("`>_`")
+    sleep(0.1)
+    msg.edit("`>c_`")
+    sleep(0.1)
+    msg.edit("`>cd`")
+    sleep(0.1)
+    msg.edit("`>cd _`")
+    sleep(0.1)
+    msg.edit("`>cd p`")
+    sleep(0.1)
+    msg.edit("`>cd pr_`")
+    sleep(0.1)
+    msg.edit("`>cd pro`")
+    sleep(0.1)
+    msg.edit("`>cd proj_`")
+    sleep(0.1)
+    msg.edit("`>cd proje`")
+    sleep(0.1)
+    msg.edit("`>cd projec_`")
+    sleep(0.1)
+    msg.edit("`>cd project`")
+    sleep(0.6)
+    msg.edit("`>cd project`\n" + "`project>_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>g`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>gi_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git i_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git in`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git ini_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`")
+    sleep(0.6)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>g_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>gi`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git a_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git ad`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [=---------] 3%`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [=---------] 5%`")
+    sleep(0.3)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [===-------] 30%`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [===-------] 36%`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [====------] 41%`")
+    sleep(0.4)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [======----] 67%`")
+    sleep(0.2)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>g_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>gi`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git c`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git co_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git com`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git comm_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commi`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -a_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"I`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`")
+    sleep(2)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>g_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>gi`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git p`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git pu_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git pus`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push h`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push he_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push her`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push hero_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push herok`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku m`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku ma_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku mas`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku mast_`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku maste`")
+    sleep(0.1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku master`")
+    sleep(2)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku master`\n" + "`  Counting objects: 100% (5/5), done.`")
+    sleep(1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku master`\n" + "`  Counting objects: 100% (5/5), done.\n  Writing objects: 100% (3/3), 364 bytes | 364.00 KiB/s, done.`")
+    sleep(1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku master`\n" + "`  Counting objects: 100% (5/5), done.\n  Writing objects: 100% (3/3), 364 bytes | 364.00 KiB/s, done.\n  remote: Compressing source files... done.`")
+    sleep(1)
+    msg.edit("`>cd project`\n" + "`project>git init`\n" + "`  Git in project/.git/`\n" + "`project>git add .`" + "\n`  [==========] 100%`\n" + "`project>git commit -am \"IT\"`\n" + "`  [master b2a98eb] IT`\n" + "`project>git push heroku master`\n" + "`  Counting objects: 100% (5/5), done.\n  Writing objects: 100% (3/3), 364 bytes | 364.00 KiB/s, done.\n  remote: Compressing source files... done.\n  remote: Verifying deploy... done.`")
+
+
+# мусор мозг
+## youtube.com/c/MineMcBoy
+@app.on_message(filters.command(["brain", "b"], prefixes="."))
+def brain(app, msg):
+    msg.edit("Твой мозг \n🗑          🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑         🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑        🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑       🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑      🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑     🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑    🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑   🧠🏃🏻")
+    msg.edit("Твой мозг \n🗑 🧠🏃🏻")
+    msg.edit("Твой мозг в мусорке \n🗑 🙍🏼‍♂️")
+#
 @app.on_message(filters.command("help", prefixes="."))
 def hel(app, msg):
     msg.edit_text("Команды:"
@@ -279,6 +670,7 @@ def hel(app, msg):
                         "\n  <code>.t</code> или <code>.time</code> - текущее время"
                         "\n  <code>.type</code> - эффект набора текста"
                         "\n  <code>.go</code> - хакер в деле"
+                        "\n  <code>.cmd</code> или <code>.console</code> - консоль"
                         "\n  <code>.js</code> - проверить код js"
                         "\n  <code>.py</code> - проверить код python"
                         "\n  <code>.calc</code> - посчитать"
@@ -286,6 +678,14 @@ def hel(app, msg):
                         "\n  <code>.ru</code> - перевести с английского на русский"
                         "\n  <code>.me</code> - о тебе"
                         "\n  <code>.hi</code> - быстрый привет"
+                        "\n  <code>.run</code> - бегущий человечек"
+                        "\n  <code>.game</code> - кинь кубик"
+                        "\n  <code>.love</code> - отправь любимой"
+                        "\n  <code>.pong</code> - анимация пинг-понга"
+                        "\n  <code>.webhtml</code> - получить код страницы"
+                        "\n  <code>.webcode</code> - получить код ответа сайта"
+                        "\n  <code>.ip</code> - получить ip собеседника(замените в ссылке почту!)"
+                        "\n  <code>.b</code> или <code>.brain</code> - прикол🧠"
                         "\n  <code>.test</code> - проверить работоспособность", parse_mode='html')
 
 @app.on_message(filters.command("vsevolodhtml", prefixes="@"))

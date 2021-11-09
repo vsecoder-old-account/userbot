@@ -9,13 +9,57 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.raw import functions
 from pyrogram.types import ChatPermissions
+from pyrogram.raw.types import (
+    UpdateNewMessage,
+    MessageMediaPhoto,
+    MessageMediaDocument,
+    PeerUser,
+    MessageService,
+)
+from pyrogram import Client
+import os.path
 import requests
 from requests import HTTPError
 import time, requests, json
 from time import sleep
 import random
 from translate import Translator
+import time
+from memory_profiler import memory_usage
+import os
+import random
+import psutil
+import subprocess
 #from prettytable import PrettyTable
+from memory_profiler import memory_usage
+import os
+import random
+import subprocess
+
+def code_start(code):
+	num = random.randint(0, 100000000)
+	try:
+		f = open(f'test{num}.py', 'w', encoding='utf8')
+		f.write(code)
+		f.close()
+		print(code)
+		result = subprocess.run(
+			f'python test{num}.py', 
+			stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
+			shell=True, check=True, timeout=3
+		).stdout.decode('utf-8')
+		print(result)
+		try:
+			os.remove(f'test{num}.py')
+		except Exception as e:
+			print('File remove error: ' + str(e))
+		return result
+	except subprocess.CalledProcessError as e:
+		print('Subprocess: ' + str(e))
+		return str(e.output)
+	except Exception as e:
+		print('Exception: ' + str(e))
+		return str(e)
 
 app = Client("my_account")
 
@@ -32,6 +76,32 @@ def thanos(_, msg):
     msg.edit_text("Но какой ценой?")
     sleep(2)
     msg.delete()
+
+@app.on_raw_update(group=-100)
+def handler(app, update, users, chats):
+    if isinstance(update, UpdateNewMessage) and not isinstance(
+        update.message, MessageService
+    ):
+        if (
+            (
+                isinstance(update.message.media, MessageMediaDocument)
+                or isinstance(update.message.media, MessageMediaPhoto)
+            )
+            #and isinstance(update.message.to_id, PeerUser)
+            and update.message.out is False
+            and update.message.media.ttl_seconds is not None
+        ):
+            message = app.get_messages(update.message.peer_id.user_id, update.message.id)
+            text = (
+                f"__New Secret__\n__From__ {message.from_user.first_name} -"
+                f" [{message.from_user.id}](tg://user?id={message.from_user.id}) \n\n"
+                f"[Go to message](tg://openmessage?user_id={str(message.chat.id)}"
+                f"&message_id={message.message_id})\n"
+            )
+            path = message.download()
+            if os.path.exists(path):
+                app.send_document("me", path, caption=text)
+                os.remove(path)
 
 @app.on_message(filters.command("code", prefixes="."))
 def pastc(app, msg):
@@ -207,59 +277,16 @@ def go(_, msg):
         except FloodWait as e:
             sleep(e.x)
     msg.edit("🤑 Найдены важные данные!!!")
-
-@app.on_message(filters.command("js", prefixes="."))
-def js(app, msg):
-    try:
-        code = msg.text.split(".js ", maxsplit=1)[1]
-        response = requests.post('https://rextester.com/rundotnet/api', 
-            data={
-                'LanguageChoice':'23',
-                'Program': code}
-            )
-        print(code)
-        eee = response.text
-        d = json.loads(eee)
-        er1 = d['Errors']
-        er2 = d['Result']
-        msg.edit_text("Код js:\n<code>" + code + "</code>\nОшибки:\n<code>" + str(er1) + "</code>\n" + "Логи:\n<code>" + str(er2) + "</code>", parse_mode='html')
-    except Exception as e:
-        msg.edit_text(f"Упс... ошибка...\n`{e}`")
     
 @app.on_message(filters.command("py", prefixes="."))
 def py(app, msg):
     try:
         code = msg.text.split(".py ", maxsplit=1)[1]
-        response = requests.post('https://rextester.com/rundotnet/api', 
-            data={
-                'LanguageChoice':'24',
-                'Program': code}
-            )
-        print(code)
-        eee = response.text
-        d = json.loads(eee)
-        er1 = d['Errors']
-        er2 = d['Result']
-        msg.edit_text("Код python:\n<code>" + code + "</code>\nОшибки:\n<code>" + str(er1) + "</code>\n" + "Логи:\n<code>" + str(er2) + "</code>", parse_mode='html')
-    except Exception as e:
-        msg.edit_text(f"Упс... ошибка...\n`{e}`")
-
-    
-@app.on_message(filters.command("calc", prefixes="."))
-def cacl(app, msg):
-    try:
-        code = "print(" + msg.text.split(".calc ", maxsplit=1)[1] + ")"
-        response = requests.post('https://rextester.com/rundotnet/api', 
-            data={
-                'LanguageChoice':'24',
-                'Program': code}
-            )
-        print(code)
-        eee = response.text
-        d = json.loads(eee)
-        er1 = d['Errors']
-        er2 = d['Result']
-        msg.edit_text(msg.text.split(".calc ", maxsplit=1)[1] + " = " + str(er2), parse_mode='html')
+        start_time = time.time()
+        checked = code_start(code)
+        memory = memory_usage()[0] - 28
+        stop_time = time.time() - start_time
+        msg.edit_text("Код python:\n<code>" + code + "</code>Результат:\n<code>" + str(checked[:-1]) + "</code>\n" + "Время выполнения:\n<code>" + str(stop_time) + "</code>\n" + "Memory usage:\n<code>" + str(memory) + "</code>", parse_mode='html')
     except Exception as e:
         msg.edit_text(f"Упс... ошибка...\n`{e}`")
 
@@ -671,9 +698,7 @@ def hel(app, msg):
                         "\n  <code>.type</code> - эффект набора текста"
                         "\n  <code>.go</code> - хакер в деле"
                         "\n  <code>.cmd</code> или <code>.console</code> - консоль"
-                        "\n  <code>.js</code> - проверить код js"
                         "\n  <code>.py</code> - проверить код python"
-                        "\n  <code>.calc</code> - посчитать"
                         "\n  <code>.en</code> - перевести с русского на английский"
                         "\n  <code>.ru</code> - перевести с английского на русский"
                         "\n  <code>.me</code> - о тебе"

@@ -2,3 +2,4 @@ pyrogram
 requests
 translate
 prettytable
+memory_profiler

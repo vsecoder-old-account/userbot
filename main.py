@@ -36,30 +36,38 @@ import os
 import random
 import subprocess
 
+mem = ''
+
 def code_start(code):
-	num = random.randint(0, 100000000)
-	try:
-		f = open(f'test{num}.py', 'w', encoding='utf8')
-		f.write(code)
-		f.close()
-		print(code)
-		result = subprocess.run(
-			f'python test{num}.py', 
-			stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
-			shell=True, check=True, timeout=3
-		).stdout.decode('utf-8')
-		print(result)
-		try:
-			os.remove(f'test{num}.py')
-		except Exception as e:
-			print('File remove error: ' + str(e))
-		return result
-	except subprocess.CalledProcessError as e:
-		print('Subprocess: ' + str(e))
-		return str(e.output)
-	except Exception as e:
-		print('Exception: ' + str(e))
-		return str(e)
+    global mem
+    num = random.randint(0, 100000000)
+    try:
+        f = open(f'test{num}.py', 'w', encoding='utf8')
+        f.write(code)
+        f.close()
+        print(code)
+        result = subprocess.run(
+            f'python3.8 test{num}.py', 
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
+            shell=True, check=True, timeout=3
+        ).stdout.decode('utf-8')
+        mem = subprocess.run(
+            f'python3.8 -m memory_profiler test{num}.py', 
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
+            shell=True, check=True
+        ).stdout.decode('utf-8')
+        print(result)
+        try:
+            os.remove(f'test{num}.py')
+        except Exception as e:
+            print('File remove error: ' + str(e))
+        return result
+    except subprocess.CalledProcessError as e:
+        print('Subprocess: ' + str(e))
+        return str(e.output)
+    except Exception as e:
+        print('Exception: ' + str(e))
+        return str(e)
 
 app = Client("my_account")
 
@@ -283,10 +291,11 @@ def py(app, msg):
     try:
         code = msg.text.split(".py ", maxsplit=1)[1]
         start_time = time.time()
+        old_memory = memory_usage()[0]
         checked = code_start(code)
-        memory = memory_usage()[0] - 28
+        memory = memory_usage()[0] - old_memory
         stop_time = time.time() - start_time
-        msg.edit_text("Код python:\n<code>" + code + "</code>Результат:\n<code>" + str(checked[:-1]) + "</code>\n" + "Время выполнения:\n<code>" + str(stop_time) + "</code>\n" + "Memory usage:\n<code>" + str(memory) + "</code>", parse_mode='html')
+        msg.edit_text("<code>" + code + "</code>\n\n<b>Result:</b>\n<code>" + str(checked[:-1]) + "</code>\n\n" + "<b>Время выполнения: </b> <code>" + str(stop_time) + "s</code>\n" + "<b>Memory usage: </b> <code>~" + str(memory) + "MiB</code>\n\n" + str(mem), parse_mode='html')
     except Exception as e:
         msg.edit_text(f"Упс... ошибка...\n`{e}`")
 
@@ -728,4 +737,4 @@ app.run()
 #  V     V   S        E        V     V   O     O   L        O     O   D   D    |    H    H       T       M   M   M   L        
 #  V     V    SSSS    EEEEEE   V     V   O     O   L        O     O   D    D   |    HHHHHH       T       M   M   M   L        
 #   V   V         S   E         V   V    O     O   L        O     O   D   D    |    H    H       T       M       M   L        
-#    VVV     SSSSS    EEEEEE     VVV      OOOOO    LLLLLL    OOOOO    DDDD     |    H    H       T       M       M   LLLLLL   
+#    VVV     SSSSS    EEEEEE     VVV      OOOOO    LLLLLL    OOOOO    DDDD     |    H    H       T       M       M   LLLLLL

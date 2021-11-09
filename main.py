@@ -313,8 +313,7 @@ def trnsru(app, msg):
 @app.on_message(filters.command("test", prefixes="."))
 def test(app, msg):
     testr = 0
-    result = random.randint(97, 100)
-    while(testr < 10):
+    while(testr < 3):
         try:
             text = "⠋"
             msg.edit(text)
@@ -340,19 +339,24 @@ def test(app, msg):
             text = "⠧"
             msg.edit(text)
             sleep(0.1)
-            sleep(0.1)
             text = "⠇"
             msg.edit(text)
             sleep(0.1)
             text = "⠏"
             msg.edit(text)
             sleep(0.1)
-            testr += random.randint(1, 3)
+            testr += 1
         except FloodWait as e:
             sleep(e.x)
-            result -= 1
 
-    msg.edit("Test complete, works " + str(result) + "% modules")
+    ram = psutil.virtual_memory()
+
+    reply = "Pong!\n\n"
+    reply += " CPU: " + str(psutil.cpu_count()) + " cores (" + str(psutil.cpu_freq().max) + "MHz) with " + str(psutil.cpu_percent()) + "% current usage\n"
+    reply += " RAM: " + str(ram.used >> 20) +"mb / "+ str(ram.total >> 20) + "mb\n"
+
+
+    msg.edit(reply)
 
 @app.on_message(filters.command("run", prefixes="."))
 def run(app, msg):
